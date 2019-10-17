@@ -1,7 +1,15 @@
 import React, { Fragment } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { 
+  BrowserRouter as Router,
+  Route,
+  Switch
+} from 'react-router-dom';
 import { Container } from 'reactstrap';
 import './App.css';
+
+// REDUX IMPORTS
+import { Provider } from 'react-redux';
+import Store from './store';
 
 // COMPONENTS
 import AppHeader from './layouts/AppHeader';
@@ -12,6 +20,7 @@ import Login from './components/auth/Login';
 
 const App = () => {
   return (
+    <Provider store={Store}>
     <Router>
       <Fragment>
         <header>
@@ -35,6 +44,7 @@ const App = () => {
         </footer>
       </Fragment>
     </Router>
+    </Provider>
   );
 }
 
