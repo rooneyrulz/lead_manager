@@ -26,6 +26,9 @@ const AppHeader = () => {
             <NavLink exact to='/' className='nav-link'>Home</NavLink>
           </NavItem>
           <NavItem>
+            <NavLink exact to='/dashboard' className='nav-link'>Dashboard</NavLink>
+          </NavItem>
+          <NavItem>
             <NavLink exact to='/register' className='nav-link'>Register</NavLink>
           </NavItem>
           <NavItem>

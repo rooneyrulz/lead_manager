@@ -1,0 +1,13 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  line-height: 1.5;
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;;
+}
