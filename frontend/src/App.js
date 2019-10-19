@@ -16,6 +16,7 @@ import { loadUser } from './actions/auth';
 import AppHeader from './layouts/AppHeader';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard';
+import Lead from './components/Lead';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 
@@ -45,6 +46,7 @@ const App = () => {
             <Container>
               <Route exact path='/' component={Home} />
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
+              <PrivateRoute exact path='/leads' component={Lead} />
               <Route exact path='/register' component={Register} />
               <Route exact path='/login' component={Login} />
             </Container>

@@ -10,6 +10,7 @@ import {
   LOGOUT_SUCCESS,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
+import setAlert from './alert';
 
 const uri = 'http://localhost:8000';
 
@@ -58,10 +59,21 @@ export const loginUser = ({username, password }) => async dispatch => {
 
     // DISPATCH LOAD USER
     dispatch(loadUser())
-  } catch (error) {
 
+    // DISPATCH SET ALERT
+    dispatch(setAlert('Hia, You just logged in!', 200, 'success'));
+  } catch (error) {
     // DISPATCH LOGIN_FAIL
     dispatch({ type: LOGIN_FAIL });
+
+    // DISPATCH SET ALERT
+    if (error.response.data) {
+      error.response.data.username && error.response.data.username.map(err => dispatch(setAlert(`Username: ${err}`, error.response.status, 'danger')));
+
+      error.response.data.password && error.response.data.password.map(err => dispatch(setAlert(`Password: ${err}`, error.response.status, 'danger')));
+
+      error.response.data.non_field_errors && error.response.data.non_field_errors.map(err => dispatch(setAlert(err, error.response.status, 'danger')));
+    }
   }
 };
 
@@ -84,12 +96,23 @@ export const registerUser = ({username, email, password }) => async dispatch => 
 
     // DISPATCH LOAD USER
     dispatch(loadUser())
+
+    // DISPATCH SET ALERT
+    dispatch(setAlert('Hia, You just logged in!', 200, 'success'));
   } catch (error) {
+    // DISPATCH REGISTER_FAIL
+    dispatch({ type: REGISTER_FAIL });
 
     console.log(error.response.data);
 
-    // DISPATCH REGISTER_FAIL
-    dispatch({ type: REGISTER_FAIL });
+    // DISPATCH SET ALERT
+    if (error.response.data) {
+      error.response.data.username && error.response.data.username.map(err => dispatch(setAlert(`Username: ${err}`, error.response.status, 'danger')));
+
+      error.response.data.email && error.response.data.email.map(err => dispatch(setAlert(`Email: ${err}`, error.response.status, 'danger')));
+
+      error.response.data.password && error.response.data.password.map(err => dispatch(setAlert(`Password: ${err}`, error.response.status, 'danger')));
+    }
   }
 };
 
@@ -107,6 +130,9 @@ export const logoutUser = () => async dispatch => {
 
     // DISPATCH LOGIN_SUCCESS
     dispatch({ type: LOGOUT_SUCCESS });
+
+    // DISPATCH SET ALERT
+    dispatch(setAlert('You are successfully logged out!', 200, 'success'));
   } catch (error) {
     console.log(error);
   }

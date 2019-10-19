@@ -27,6 +27,9 @@ const AppHeader = ({ isAuthenticated, logoutUser }) => {
         <NavLink exact to='/dashboard' className='nav-link'>Dashboard</NavLink>
       </NavItem>
       <NavItem>
+        <NavLink exact to='/leads' className='nav-link'>Leads</NavLink>
+      </NavItem>
+      <NavItem>
         <Button onClick={e => logoutUser()} className='btn btn-light'>Logout</Button>
       </NavItem>
     </Fragment>

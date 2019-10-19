@@ -6,8 +6,9 @@ import { Form, FormGroup, Input, Label, Button } from 'reactstrap';
 // REDUX
 import { connect } from 'react-redux';
 import { registerUser } from '../../actions/auth';
+import setAlert from '../../actions/alert';
 
-const Register = ({ isAuthenticated, registerUser, history }) => {
+const Register = ({ isAuthenticated, registerUser, setAlert, history }) => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -21,13 +22,32 @@ const Register = ({ isAuthenticated, registerUser, history }) => {
     ...formData,
     [e.target.name]: e.target.value
   });
+  
+  const { username, email, password, password2 } = formData;
 
   const onSubmit = e => {
     e.preventDefault();
-    registerUser(formData);
-  };
 
-  const { username, email, password, password2 } = formData;
+    if (
+      !username.trim() ||
+      !email.trim() ||
+      !password.trim() ||
+      !password2.trim()
+    ) {
+      setAlert('Please fill out all fields!', 400, 'danger');
+    } else if (password !== password2 ) {
+      setAlert('Password does not match!', 400, 'danger');
+    } else {
+      registerUser(formData);
+      setFormData({
+        ...formData,
+        username: '',
+        email: '',
+        password: '',
+        password2: ''
+      });
+    }
+  };
 
   return (
     <div style={{ width: '60%', margin: 'auto' }} className='Register'>
@@ -96,11 +116,12 @@ const Register = ({ isAuthenticated, registerUser, history }) => {
 
 Register.propTypes = {
   isAuthenticated: PropTypes.bool,
-  registerUser: PropTypes.func.isRequired
+  registerUser: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, { registerUser })(Register);
+export default connect(mapStateToProps, { registerUser, setAlert })(Register);
