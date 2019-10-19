@@ -1,4 +1,4 @@
-import { v4 } from 'uuid';
+import uuid from 'uuid';
 import { CREATE_ALERT, REMOVE_ALERT } from './types';
 
 export default (
@@ -6,10 +6,10 @@ export default (
   status,
   alertType,
   typeId=null,
-  timeout=10000
+  timeout=4000
 ) => dispatch => {
     // DISPATCH CREATE_MESSAGE
-    id = v4();
+    const id = uuid.v4();
     dispatch({ 
       type: CREATE_ALERT,
       payload: { id, msg, status, alertType, typeId }

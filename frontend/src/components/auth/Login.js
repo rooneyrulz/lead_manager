@@ -6,8 +6,9 @@ import { Form, FormGroup, Input, Label, Button } from 'reactstrap';
 // REDUX
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions/auth';
+import setAlert from '../../actions/alert';
 
-const Login = ({ isAuthenticated, loginUser, history }) => {
+const Login = ({ isAuthenticated, loginUser, setAlert, history }) => {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -20,12 +21,22 @@ const Login = ({ isAuthenticated, loginUser, history }) => {
     [e.target.name]: e.target.value
   });
 
+  const { username, password } = formData;
+
   const onSubmit = e => {
     e.preventDefault();
-    loginUser(formData);
-  };
 
-  const { username, password } = formData;
+    if (!username.trim() || !password.trim()) {
+      setAlert('Please fill out all fields!', 400, 'danger');
+    } else {
+      loginUser(formData);
+      setFormData({
+        ...formData,
+        username: '',
+        password: ''
+      });
+    }
+  };
 
   return (
     <div style={{ width: '60%', margin: 'auto' }} className='Login'>
@@ -77,4 +88,4 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, { loginUser })(Login);
+export default connect(mapStateToProps, { loginUser, setAlert })(Login);

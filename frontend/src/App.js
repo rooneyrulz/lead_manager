@@ -21,8 +21,9 @@ import Login from './components/auth/Login';
 
 import setAuthToken from './utils/setAuthToken';
 
-// PRIVATE ROUTE
+// PRIVATE ROUTE & ALERT
 import PrivateRoute from './components/routing/PrivateRoute';
+import Alert from './layouts/Alert';
 
 if (localStorage.token) setAuthToken(localStorage.token);
 
@@ -39,6 +40,7 @@ const App = () => {
           <AppHeader />
         </header>
         <main className='my-5'>
+          <Alert />
           <Switch>
             <Container>
               <Route exact path='/' component={Home} />
