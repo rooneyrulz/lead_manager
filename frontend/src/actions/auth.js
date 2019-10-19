@@ -86,6 +86,8 @@ export const registerUser = ({username, email, password }) => async dispatch => 
     dispatch(loadUser())
   } catch (error) {
 
+    console.log(error.response.data);
+
     // DISPATCH REGISTER_FAIL
     dispatch({ type: REGISTER_FAIL });
   }
