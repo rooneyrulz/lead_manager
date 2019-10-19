@@ -13,6 +13,7 @@ import setAuthToken from '../utils/setAuthToken';
 
 const uri = 'http://localhost:8000';
 
+// LOAD USER
 export const loadUser = () => async dispatch => {
   if (localStorage.token) setAuthToken(localStorage.token);
 
@@ -38,6 +39,7 @@ export const loadUser = () => async dispatch => {
   }
 };
 
+// LOGIN USER
 export const loginUser = ({username, password }) => async dispatch => {
   // SET HEADERS
   const config = {
@@ -60,5 +62,50 @@ export const loginUser = ({username, password }) => async dispatch => {
 
     // DISPATCH LOGIN_FAIL
     dispatch({ type: LOGIN_FAIL });
+  }
+};
+
+// REGISTER USER
+export const registerUser = ({username, email, password }) => async dispatch => {
+  // SET HEADERS
+  const config = {
+    header: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const body = { username, email, password };
+
+  try {
+    const { data } = await axios.post(`${uri}/api/auth/register`, body, config);
+
+    // DISPATCH REGISTER_SUCCESS
+    dispatch({ type: REGISTER_SUCCESS, payload: data });
+
+    // DISPATCH LOAD USER
+    dispatch(loadUser())
+  } catch (error) {
+
+    // DISPATCH REGISTER_FAIL
+    dispatch({ type: REGISTER_FAIL });
+  }
+};
+
+// LOGOUT USER
+export const logoutUser = () => async dispatch => {
+  // SET HEADERS
+  const config = {
+    header: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    const res = await axios.post(`${uri}/api/auth/logout`, null, config);
+
+    // DISPATCH LOGIN_SUCCESS
+    dispatch({ type: LOGOUT_SUCCESS });
+  } catch (error) {
+    console.log(error);
   }
 };

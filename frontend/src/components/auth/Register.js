@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { Form, FormGroup, Input, Label, Button } from 'reactstrap';
 
-const Register = () => {
+// REDUX
+import { connect } from 'react-redux';
+import { registerUser } from '../../actions/auth';
 
-  const onChange = e => {};
+const Register = ({ isAuthenticated, registerUser, history }) => {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    password2: ''
+  });
+
+  if (isAuthenticated) history.push('/dashboard');
+
+  const onChange = e => setFormData({
+    ...formData,
+    [e.target.name]: e.target.value
+  });
+
+  const onSubmit = e => {
+    e.preventDefault();
+    registerUser(formData);
+  };
+
+  const { username, email, password, password2 } = formData;
 
   return (
     <div style={{ width: '60%', margin: 'auto' }} className='Register'>
@@ -12,13 +35,14 @@ const Register = () => {
         <h3 style={{ fontWeight: 'bold' }}>Register</h3>
       </header>
       <hr />
-      <Form>
+      <Form onSubmit={e => onSubmit(e)}>
         <FormGroup>
           <Label htmlFor='username'>Username</Label>
           <Input
             id='username'
             type='text'
             name='username'
+            value={username}
             className='form-control'
             placeholder='Enter username'
             onChange={e => onChange(e)}
@@ -30,6 +54,7 @@ const Register = () => {
             id='email'
             type='email'
             name='email'
+            value={email}
             className='form-control'
             placeholder='Enter email'
             onChange={e => onChange(e)}
@@ -41,6 +66,7 @@ const Register = () => {
             id='password'
             type='text'
             name='password'
+            value={password}
             className='form-control'
             placeholder='Enter password'
             onChange={e => onChange(e)}
@@ -52,6 +78,7 @@ const Register = () => {
             id='password2'
             type='password'
             name='password2'
+            value={password2}
             className='form-control'
             placeholder='Confirm password'
             onChange={e => onChange(e)}
@@ -67,4 +94,13 @@ const Register = () => {
   )
 }
 
-export default Register;
+Register.propTypes = {
+  isAuthenticated: PropTypes.bool,
+  registerUser: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { registerUser })(Register);
