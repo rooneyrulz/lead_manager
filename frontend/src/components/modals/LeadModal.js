@@ -1,6 +1,14 @@
 import React, { Fragment, useState } from 'react';
+import PropTypes from 'prop-types';
 
-const LeadModal = () => {
+import AlertItem from '../../layouts/AlertItem';
+
+// REDUX
+import { connect } from 'react-redux';
+import { createLead } from '../../actions/lead';
+import setAlert from '../../actions/alert';
+
+const LeadModal = ({ alert, createLead, setAlert }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,14 +26,29 @@ const LeadModal = () => {
 
   const onSubmit = e => {
     e.preventDefault();
-    console.log(formData);
+    if (
+      !name.trim() ||
+      !email.trim() ||
+      !country.trim() ||
+      !description.trim()
+    ) {
+      setAlert(
+        'Please fill in all fields!',
+        400,
+        'danger',
+        'LEAD_CREATE_ERROR'
+      );
+    } else {
+      const body = { name, email, country, description };
+      createLead(body);
 
-    setFormData({
-      name: '',
-      email: '',
-      country: '',
-      description: ''
-    });
+      setFormData({
+        name: '',
+        email: '',
+        country: '',
+        description: ''
+      });
+    }
   };
 
   return (
@@ -62,6 +85,14 @@ const LeadModal = () => {
                 </button>
               </div>
               <div className='modal-body'>
+                <div className='form-group'>
+                  {alert.map(
+                    alrt =>
+                      alrt.typeId === 'LEAD_CREATE_ERROR' && (
+                        <AlertItem alert={alrt} />
+                      )
+                  )}
+                </div>
                 <div className='form-group'>
                   <input
                     type='text'
@@ -127,4 +158,11 @@ const LeadModal = () => {
   );
 };
 
-export default LeadModal;
+const mapStateToProps = state => ({
+  alert: state.alert
+});
+
+export default connect(
+  mapStateToProps,
+  { createLead, setAlert }
+)(LeadModal);
