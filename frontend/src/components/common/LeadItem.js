@@ -12,7 +12,7 @@ import {
 import LeadUpdateModal from '../modals/LeadUpdateModal';
 
 const LeadItem = ({ lead }) => {
-  const { name, email, country, description, author } = lead;
+  const { id, name, email, country, description, author } = lead;
 
   return (
     <div
@@ -64,7 +64,7 @@ const LeadItem = ({ lead }) => {
             </ListGroupItem>
           </CardBody>
           <CardFooter>
-            <LeadUpdateModal />
+            <LeadUpdateModal id={id} />
             <Button color='danger'>Delete</Button>
           </CardFooter>
         </div>

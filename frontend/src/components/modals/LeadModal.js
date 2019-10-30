@@ -48,6 +48,13 @@ const LeadModal = ({ alert, createLead, setAlert }) => {
         country: '',
         description: ''
       });
+
+      setAlert(
+        'A lead created successfully!',
+        201,
+        'success',
+        'LEAD_CREATE_SUCCESS'
+      );
     }
   };
 
@@ -57,14 +64,14 @@ const LeadModal = ({ alert, createLead, setAlert }) => {
         type='button'
         className='btn btn-primary'
         data-toggle='modal'
-        data-target='#modelId'
+        data-target='#modal-create'
       >
         Create Leads
       </button>
 
       <div
         className='modal fade'
-        id='modelId'
+        id='modal-create'
         tabIndex='-1'
         role='dialog'
         aria-labelledby='modelTitleId'
@@ -89,6 +96,12 @@ const LeadModal = ({ alert, createLead, setAlert }) => {
                   {alert.map(
                     alrt =>
                       alrt.typeId === 'LEAD_CREATE_ERROR' && (
+                        <AlertItem alert={alrt} />
+                      )
+                  )}
+                  {alert.map(
+                    alrt =>
+                      alrt.typeId === 'LEAD_CREATE_SUCCESS' && (
                         <AlertItem alert={alrt} />
                       )
                   )}

@@ -11,7 +11,7 @@ const initialState = {
   loading: true,
   leads: [],
   lead: null,
-  errors: []
+  errors: null
 };
 
 export default (state=initialState, action) => {

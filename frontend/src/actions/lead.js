@@ -7,6 +7,7 @@ import {
   REMOVE_LEAD,
   LEAD_ERRORS
 } from './types';
+import setAlert from './alert';
 
 const uri = 'http://localhost:8000';
 
@@ -63,7 +64,19 @@ export const createLead = lead => async dispatch => {
     dispatch({ type: CREATE_LEAD, payload: data });
   } catch (error) {
     // DISPATCH LEAD_ERRORS
-    console.log(error);
+    console.log(error.response.data);
+
+    // DISPATCH LEAD_ERRORS & SET ALERT
+    if (error.response.data) {
+      // DISPATCH LOGIN_FAIL
+      dispatch({ type: LEAD_ERRORS, payload:  error.response.data});
+
+      error.response.data.name && error.response.data.name.map(err => dispatch(setAlert(`Name: ${err}`, error.response.status, 'danger', 'LEAD_CREATE_ERROR')));
+
+      error.response.data.email && error.response.data.email.map(err => dispatch(setAlert(`Email: ${err}`, error.response.status, 'danger', 'LEAD_CREATE_ERROR')));
+
+      error.response.data.country && error.response.data.country.map(err => dispatch(setAlert(`Country: ${err}`, error.response.status, 'danger', 'LEAD_CREATE_ERROR')));
+    }
   }
 };
 

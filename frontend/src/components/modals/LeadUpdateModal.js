@@ -1,6 +1,14 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
-const LeadUpdateModal = () => {
+// REDUX
+import { connect } from 'react-redux';
+import { getLead } from '../../actions/lead';
+import setAlert from '../../actions/alert';
+
+const LeadUpdateModal = ({ id, lead, alert, getLead, setAlert }) => {
+  useEffect(() => { getLead(id) }, [getLead, id]);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -34,14 +42,14 @@ const LeadUpdateModal = () => {
         type='button'
         className='btn btn-primary'
         data-toggle='modal'
-        data-target='#modelId'
+        data-target='#modal-update'
       >
         Edit
       </button>
 
       <div
         className='modal fade'
-        id='modelId'
+        id='modal-update'
         tabIndex='-1'
         role='dialog'
         aria-labelledby='modelTitleId'
@@ -127,4 +135,9 @@ const LeadUpdateModal = () => {
   );
 };
 
-export default LeadUpdateModal;
+const mapStateToProps = state => ({
+  lead: state.lead,
+  alert: state.alert
+});
+
+export default connect(mapStateToProps, { getLead, setAlert })(LeadUpdateModal);

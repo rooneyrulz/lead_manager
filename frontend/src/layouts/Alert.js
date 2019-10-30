@@ -9,7 +9,7 @@ import AlertItem from './AlertItem';
 
 const Alert = ({ alert }) => {
   const alertItems = alert.length > 0 && alert.map(
-    alrt => alrt.typeId !== 'LEAD_CREATE_ERROR' && <AlertItem key={alrt.id} alert={alrt} />
+    alrt => alrt.typeId !== 'LEAD_CREATE_ERROR' && alrt.typeId !== 'LEAD_UPDATE_ERROR' && alrt.typeId !== 'LEAD_CREATE_SUCCESS' && alrt.typeId !== 'LEAD_UPDATE_SUCCESS' && <AlertItem key={alrt.id} alert={alrt} />
   );
 
   return (
