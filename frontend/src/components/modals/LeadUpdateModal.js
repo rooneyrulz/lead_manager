@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { Modal, ModalBody, ModalHeader, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 // REDUX
@@ -6,17 +7,33 @@ import { connect } from 'react-redux';
 import { getLead } from '../../actions/lead';
 import setAlert from '../../actions/alert';
 
-const LeadUpdateModal = ({ id, lead, alert, getLead, setAlert }) => {
-  useEffect(() => { getLead(id) }, [getLead, id]);
-
+const LeadUpdateModal = ({ id, lead: { loading, lead }, alert, getLead, setAlert }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     country: '',
     description: ''
   });
+  
+  useEffect(() => { 
+    getLead(id)
+
+    setTimeout(() => {
+      setFormData({
+      ...formData,
+      name: loading || !lead.name ? '' : lead.name,
+      email: loading || !lead.email ? '' : lead.email,
+      country: loading || !lead.country ? '' : lead.country,
+      description: loading || !lead.description ? '' : lead.description
+    });
+    }, 2000)
+    
+  }, [loading, getLead, id]);
 
   const { name, email, country, description } = formData;
+
+  const toggle = e => setIsOpen(!isOpen);
 
   const onChange = e =>
     setFormData({
@@ -38,38 +55,25 @@ const LeadUpdateModal = ({ id, lead, alert, getLead, setAlert }) => {
 
   return (
     <Fragment>
-      <button
-        type='button'
-        className='btn btn-primary'
-        data-toggle='modal'
-        data-target='#modal-update'
-      >
-        Edit
-      </button>
-
-      <div
-        className='modal fade'
-        id='modal-update'
-        tabIndex='-1'
-        role='dialog'
-        aria-labelledby='modelTitleId'
-        aria-hidden='true'
-      >
-        <div className='modal-dialog' role='document'>
-          <div className='modal-content'>
-            <form onSubmit={e => onSubmit(e)}>
-              <div className='modal-header'>
-                <h5 className='modal-title'>Leads</h5>
-                <button
-                  type='button'
-                  className='close'
-                  data-dismiss='modal'
-                  aria-label='Close'
-                >
-                  <span aria-hidden='true'>&times;</span>
-                </button>
-              </div>
-              <div className='modal-body'>
+      <Button color="primary" onClick={e => toggle(e)}>Edit</Button>
+      <Modal isOpen={isOpen} toggle={e => toggle(e)}>
+        <ModalHeader toggle={e => toggle(e)}>Leads</ModalHeader>
+        <ModalBody>
+          <form onSubmit={e => onSubmit(e)}>
+                {/* <div className='form-group'>
+                  {alert.map(
+                    alrt =>
+                      alrt.typeId === 'LEAD_CREATE_ERROR' && (
+                        <AlertItem alert={alrt} />
+                      )
+                  )}
+                  {alert.map(
+                    alrt =>
+                      alrt.typeId === 'LEAD_CREATE_SUCCESS' && (
+                        <AlertItem alert={alrt} />
+                      )
+                  )}
+                </div> */}
                 <div className='form-group'>
                   <input
                     type='text'
@@ -114,12 +118,11 @@ const LeadUpdateModal = ({ id, lead, alert, getLead, setAlert }) => {
                     onChange={e => onChange(e)}
                   ></textarea>
                 </div>
-              </div>
               <div className='modal-footer'>
                 <button
                   type='button'
                   className='btn btn-secondary'
-                  data-dismiss='modal'
+                  onClick={e => toggle(e)}
                 >
                   Close
                 </button>
@@ -128,9 +131,8 @@ const LeadUpdateModal = ({ id, lead, alert, getLead, setAlert }) => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      </div>
+        </ModalBody>
+      </Modal>
     </Fragment>
   );
 };

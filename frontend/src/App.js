@@ -17,6 +17,7 @@ import AppHeader from './layouts/AppHeader';
 import Home from './components/Home';
 import Dashboard from './components/Dashboard';
 import Lead from './components/Lead';
+import LeadDetail from './components/LeadDetail';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 
@@ -47,6 +48,7 @@ const App = () => {
               <Route exact path='/' component={Home} />
               <PrivateRoute exact path='/dashboard' component={Dashboard} />
               <PrivateRoute exact path='/leads' component={Lead} />
+              <PrivateRoute exact path='/leads/:id' component={LeadDetail} />
               <Route exact path='/register' component={Register} />
               <Route exact path='/login' component={Login} />
             </Container>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -9,7 +10,6 @@ import {
   ListGroupItem
 } from 'reactstrap';
 
-import LeadUpdateModal from '../modals/LeadUpdateModal';
 
 const LeadItem = ({ lead }) => {
   const { id, name, email, country, description, author } = lead;
@@ -64,8 +64,7 @@ const LeadItem = ({ lead }) => {
             </ListGroupItem>
           </CardBody>
           <CardFooter>
-            <LeadUpdateModal id={id} />
-            <Button color='danger'>Delete</Button>
+            <Link to={`/leads/${id}`}>View Lead</Link>
           </CardFooter>
         </div>
       </Card>
