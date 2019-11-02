@@ -1,37 +1,21 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Modal, ModalBody, ModalHeader, Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 
+// COMPONENTS
+import AlertItem from '../../layouts/AlertItem';
+
 // REDUX
 import { connect } from 'react-redux';
-import { getLead } from '../../actions/lead';
+import { updateLead } from '../../actions/lead';
 import setAlert from '../../actions/alert';
 
-const LeadUpdateModal = ({ id, lead: { loading, lead }, alert, getLead, setAlert }) => {
+const LeadUpdateModal = ({ lead, alert, updateLead, setAlert, history }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    country: '',
-    description: ''
-  });
+  const [formData, setFormData] = useState({...lead});
   
-  useEffect(() => { 
-    getLead(id)
-
-    setTimeout(() => {
-      setFormData({
-      ...formData,
-      name: loading || !lead.name ? '' : lead.name,
-      email: loading || !lead.email ? '' : lead.email,
-      country: loading || !lead.country ? '' : lead.country,
-      description: loading || !lead.description ? '' : lead.description
-    });
-    }, 2000)
-    
-  }, [loading, getLead, id]);
-
-  const { name, email, country, description } = formData;
+  const { id, name, email, country, description } = formData;
 
   const toggle = e => setIsOpen(!isOpen);
 
@@ -43,14 +27,28 @@ const LeadUpdateModal = ({ id, lead: { loading, lead }, alert, getLead, setAlert
 
   const onSubmit = e => {
     e.preventDefault();
-    console.log(formData);
-
-    setFormData({
-      name: '',
-      email: '',
-      country: '',
-      description: ''
-    });
+    if (
+      !name.trim() ||
+      !email.trim() ||
+      !country.trim() ||
+      !description.trim()
+    ) {
+      setAlert(
+        'Please fill in all fields!',
+        400,
+        'danger',
+        'LEAD_UPDATE_ERROR'
+      );
+    } else {
+      const body = { name, email, country, description };
+      updateLead(body, id, history);
+      setFormData({
+        name: '',
+        email: '',
+        country: '',
+        description: ''
+      });
+    }
   };
 
   return (
@@ -60,20 +58,14 @@ const LeadUpdateModal = ({ id, lead: { loading, lead }, alert, getLead, setAlert
         <ModalHeader toggle={e => toggle(e)}>Leads</ModalHeader>
         <ModalBody>
           <form onSubmit={e => onSubmit(e)}>
-                {/* <div className='form-group'>
+                <div className='form-group'>
                   {alert.map(
                     alrt =>
-                      alrt.typeId === 'LEAD_CREATE_ERROR' && (
+                      alrt.typeId === 'LEAD_UPDATE_ERROR' && (
                         <AlertItem alert={alrt} />
                       )
                   )}
-                  {alert.map(
-                    alrt =>
-                      alrt.typeId === 'LEAD_CREATE_SUCCESS' && (
-                        <AlertItem alert={alrt} />
-                      )
-                  )}
-                </div> */}
+                </div>
                 <div className='form-group'>
                   <input
                     type='text'
@@ -138,8 +130,7 @@ const LeadUpdateModal = ({ id, lead: { loading, lead }, alert, getLead, setAlert
 };
 
 const mapStateToProps = state => ({
-  lead: state.lead,
   alert: state.alert
 });
 
-export default connect(mapStateToProps, { getLead, setAlert })(LeadUpdateModal);
+export default connect(mapStateToProps, { updateLead, setAlert })(withRouter(LeadUpdateModal));

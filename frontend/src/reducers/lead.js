@@ -4,11 +4,12 @@ import {
   CREATE_LEAD,
   UPDATE_LEAD,
   REMOVE_LEAD,
-  LEAD_ERRORS
+  LEAD_ERRORS,
+  LEADS_LOADING
 } from '../actions/types';
 
 const initialState = {
-  loading: true,
+  loading: false,
   leads: [],
   lead: null,
   errors: null
@@ -18,6 +19,12 @@ export default (state=initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case LEADS_LOADING:
+      return {
+        ...state,
+        loading: true
+      };
+
     case GET_LEADS:
       return {
         ...state,

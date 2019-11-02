@@ -52,13 +52,6 @@ const LeadModal = ({ alert, createLead, setAlert }) => {
         country: '',
         description: ''
       });
-
-      setAlert(
-        'A lead created successfully!',
-        201,
-        'success',
-        'LEAD_CREATE_SUCCESS'
-      );
     }
   };
 
