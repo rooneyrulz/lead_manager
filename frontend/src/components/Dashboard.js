@@ -1,11 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-const Dashboard = () => {
-  return (
+const Dashboard = ({ auth: { loading, user } }) => {
+  return loading ? <h1>Loading...</h1> : (
     <div className='Dashboard'>
       <h1 style={{ fontWeight: 'bold' }} className='display-4'>Dashboard</h1>
+      <p className='lead'>Welcome { user.name }</p>
     </div>
   )
 }
 
-export default Dashboard;
+Dashboard.propTypes = {
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(Dashboard);

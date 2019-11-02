@@ -58,6 +58,14 @@ const LeadDetail = ({
   );
 };
 
+LeadDetail.propTypes = {
+  lead: PropTypes.object.isRequired,
+  alert: PropTypes.array.isRequired,
+  getLead: PropTypes.func.isRequired,
+  deleteLead: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired
+};
+
 const mapStateToProps = state => ({
   lead: state.lead,
   alert: state.alert

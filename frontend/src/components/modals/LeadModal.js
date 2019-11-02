@@ -139,6 +139,12 @@ const LeadModal = ({ alert, createLead, setAlert }) => {
   );
 };
 
+LeadModal.propTypes = {
+  alert: PropTypes.array.isRequired,
+  createLead: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired
+};
+
 const mapStateToProps = state => ({
   alert: state.alert
 });

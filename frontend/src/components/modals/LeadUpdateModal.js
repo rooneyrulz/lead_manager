@@ -129,6 +129,13 @@ const LeadUpdateModal = ({ lead, alert, updateLead, setAlert, history }) => {
   );
 };
 
+LeadUpdateModal.propTypes = {
+  lead: PropTypes.object.isRequired,
+  alert: PropTypes.array.isRequired,
+  updateLead: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired
+};
+
 const mapStateToProps = state => ({
   alert: state.alert
 });

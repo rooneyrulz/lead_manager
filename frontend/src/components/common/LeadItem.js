@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
   Button,
@@ -70,6 +71,10 @@ const LeadItem = ({ lead }) => {
       </Card>
     </div>
   );
+};
+
+LeadItem.propTypes = {
+  lead: PropTypes.object.isRequired
 };
 
 export default LeadItem;
